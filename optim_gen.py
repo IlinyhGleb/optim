@@ -48,7 +48,7 @@ def create_func(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max
     return inner_method
 
 
-def create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max, d_min, d_max, k=1e3, p=2):
+def create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max, d_min, d_max,ga,gb,gc,gd, k=1e3, p=2):
     def inner_method(x):
         EPS = 1.0  # Значение, ниже которого второй по величине параметр в группе считается подходящим
         # TODO проверку на неодинаковость размерности
@@ -81,8 +81,11 @@ def create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_m
             xx_new = sorted(xx)
             f_res += k * max(xx_new[-2]-EPS, 0) ** p
 
+
+        #ограничение на граммовки
+        for xx, gg in zip([xa, xb, xc, xd], [ga, gb, gc, gd]):
+            for xi, gi in zip(xx, gg):
+                f_res += k * max(gi - xi, 0) ** p
         return f_res
 
     return inner_method
-
-
