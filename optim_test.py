@@ -49,15 +49,22 @@ kb = [k * KKAL_IN_GR for k in [400, 600, 550, 450]]
 kc = [k * KKAL_IN_GR for k in [50, 20, 30, 23]]
 kd = [k * KKAL_IN_GR for k in [20, 10, 10]]
 k_targ = 2000
-a_min = 50
-a_max = 200
-b_min = 50
-b_max = 500
-c_min = 50
-c_max = 500
-d_min = 50
-d_max = 500
-
+#a_min = 50
+#a_max = 200
+#b_min = 50
+#b_max = 500
+#c_min = 50
+#c_max = 500
+#d_min = 50
+#d_max = 500
+a_min = 0
+a_max = 1000
+b_min = 0
+b_max = 1000
+c_min = 0
+c_max = 1000
+d_min = 0
+d_max = 1000
 #граммовки продуктов
 ga = [500, 360, 400]
 gb = [500, 360, 400, 200]
@@ -67,34 +74,69 @@ gd = [500, 360, 400]
 # 1
 #ff = create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max, d_min, d_max, k=1e1, p=2)
 #новые входные данные для функции
-ff = create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max, d_min, d_max, ga, gb, gc, gd, k=1e1, p=2)
+ff = create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max, d_min, d_max, ga, gb, gc, gd, k=1e1, p=2, EPS=3)
 x0 = np.zeros((len(ka) + len(kb) + len(kc) + len(kd)))  # *2
 # x0 = np.random.random_sample(len(ka) + len(kb) + len(kc) + len(kd)) * 100
-(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=100, stop=400.)
-print_results(res, iter, time)
+#(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=100, stop=400.)
+#print_results(res, iter, time)
 
 # 2
-(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=10, stop=400.)
-print_results(res, iter, time)
+#(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=10, stop=400.)
+#print_results(res, iter, time)
 
 # 3
-(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=1, stop=400.)
-print_results(res, iter, time)
+#(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=1, stop=400.)
+#print_results(res, iter, time)
 
-(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=100)
-print_results(res, iter, time)
+#(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=100)
+#print_results(res, iter, time)
 
 # 2
-(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=10)
-print_results(res, iter, time)
+#(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=10)
+#print_results(res, iter, time)
 
 # 3
-(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=1)
-print_results(res, iter, time)
+#(res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=1)
+#print_results(res, iter, time)
 
+#фиксировать результаты
+alp = 1
+gam = 2
+rh = 0.9
+sig = 0.5
+dx2 = 1
+stop = 1000.
+print('начали перебор:')
 
+while (alp <= 2):
+    gam = 1.0
+    rh = 0.9
+    sig = 0.9
+    dx2 = 1
+    while (gam <= 3):
+        rh = 0.9
+        sig = 0.9
+        dx2 = 1
+        while (rh>=0.1):
+            sig = 0.9
+            dx2 = 1
+            while (sig>=0.1):
+                dx2 = 1
+                while (dx2<=1000):
+                    (res, iter), time = nelder_mead(ff, x0, alpha=alp, gamma=gam, rho=rh, sigma=sig, maxiter=20000, dx=dx2, stop=1000.)
+                    print_results(res, iter, time)
+                    print("\nalpha={a:5.1f}".format(a=alp))
+                    print("gamma={a:5.1f}".format(a=gam))
+                    print("rho={a:5.1f}".format(a=rh))
+                    print("sigma={a:5.1f}".format(a=sig))
+                    print("dx={a:5.1f}".format(a=dx2))
 
-
+                    dx2 = dx2*10
+                sig = sig-0.1
+            rh = rh-0.1
+        gam = gam+0.5
+    alp = alp+0.5
+print('конец')
 # X = np.array(np.linspace(0, 4, 50))
 # Y = np.array(np.linspace(0, 4, 50))
 # X, Y = np.meshgrid(X, Y)

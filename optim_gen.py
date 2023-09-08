@@ -48,9 +48,9 @@ def create_func(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max
     return inner_method
 
 
-def create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max, d_min, d_max, ga, gb, gc, gd, k=1e3, p=2):
+def create_func_2(k_targ, ka, kb, kc, kd, a_min, a_max, b_min, b_max, c_min, c_max, d_min, d_max, ga, gb, gc, gd, EPS=1.0, k=1e3, p=2):
     def inner_method(x):
-        EPS = 1.0  # Значение, ниже которого второй по величине параметр в группе считается подходящим
+        #EPS = 1.0 убрали епс в входные параметры # Значение, ниже которого второй по величине параметр в группе считается подходящим
         # TODO проверку на неодинаковость размерности
         xa, x = take_first(x, len(ka))
         xb, x = take_first(x, len(kb))
