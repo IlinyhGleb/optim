@@ -64,6 +64,12 @@ food_limits = np.array(ga + gb + gc + gd + ge + gf + gg)
 
 groups = np.array([len(group) for group in [ka, kb, kc, kd, ke, kf, kg]])
 
+#граммовки продуктов
+ga = [500, 360, 400]
+gb = [500, 360, 400, 200]
+gc = [500, 360, 400, 200]
+gd = [500, 360, 400]
+
 # 1
 ff = create_func(food_energy_targ,
                  groups,
@@ -73,6 +79,7 @@ ff = create_func(food_energy_targ,
                  food_limits,
                  penalty=1e1, penalty_power=2)
 x0 = np.zeros((len(ka) + len(kb) + len(kc) + len(kd) + len(ke) + len(kf) + len(kg)))
+
 # x0 = np.random.random_sample(len(ka) + len(kb) + len(kc) + len(kd)) * 100
 (res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=100, stop=400.)
 print_results(res, iter, time)

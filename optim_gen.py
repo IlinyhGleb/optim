@@ -64,8 +64,11 @@ def create_func(food_energy_goal,
             xx_new = sorted(xx)
             f_res += penalty * max(xx_new[-2] - EPS, 0)**penalty_power
 
+
+        #ограничение на граммовки
+        for xx, gg in zip([xa, xb, xc, xd], [ga, gb, gc, gd]):
+            for xi, gi in zip(xx, gg):
+                f_res += k * max(gi - xi, 0) ** p
         return f_res
 
     return inner_method
-
-
