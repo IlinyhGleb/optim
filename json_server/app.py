@@ -12,6 +12,10 @@ def flatten(list_of_lists):
     return [item for sublist in list_of_lists for item in sublist]
 
 
+def array_multiply_by_number(ar: list, num: float):
+    return [[el * num for el in row] for row in ar]
+
+
 @app.route('/optim', methods=['POST'])
 def get_optim_solu():
     data = request.get_json()
@@ -37,9 +41,9 @@ def get_optim_solu():
                 b = np.append(b, x[2])
         food_energy_groups.append(b)
 
-    for k in food_energy_groups:
-        for i in range(0, len(k)):
-            k[i] = k[i] * KKAL_IN_GRAMMS
+
+
+    food_energy_groups = array_multiply_by_number(food_energy_groups, KKAL_IN_GRAMMS)
 
     # граммовки продуктов
     cursor.execute(
