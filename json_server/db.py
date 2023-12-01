@@ -34,7 +34,7 @@ FOREIGN KEY (person_id) REFERENCES person
 ''')
 
 cursor.execute('''
-CREATE TABLE IF NOT EXISTS categories (
+CREATE TABLE IF NOT EXISTS category (
 id INT PRIMARY KEY,
 name TEXT
 )
@@ -44,8 +44,8 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS limits (
 min INT,
 max INT,
-categories_id INT,
-FOREIGN KEY (categories_id) REFERENCES categories
+category_id INT,
+FOREIGN KEY (category_id) REFERENCES category
 )
 ''')
 
@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS product (
 id INT PRIMARY KEY,
 name TEXT,
 caloricity INT,
-categories_id INT,
-FOREIGN KEY (categories_id) REFERENCES categories
+category_id INT,
+FOREIGN KEY (category_id) REFERENCES category
 )
 ''')
 
@@ -74,39 +74,39 @@ cursor.execute('INSERT INTO User (login, password) VALUES (?, ?)', ('admin', '12
 cursor.execute('INSERT INTO person (id, name, surname, age, height, weight, activity_level, sex, user_login) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', (1, 'Мария', 'Лимонова', 21, 164, 48, 2, 0, 'admin'))
 cursor.execute('INSERT INTO refrigerator (id, person_id) VALUES (?, ?)', (1, 1))
 
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (1, 'Каши'))
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (2, 'Крупы'))
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (3, 'Мясо/рыба'))
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (4, 'Фрукты'))
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (5, 'Орехи'))
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (6, 'Мучное'))
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (7, 'Молочные продукты'))
-cursor.execute('INSERT INTO categories (id, name) VALUES (?, ?)', (8, 'Овощи'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (1, 'Каши'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (2, 'Крупы'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (3, 'Мясо/рыба'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (4, 'Фрукты'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (5, 'Орехи'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (6, 'Мучное'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (7, 'Молочные продукты'))
+cursor.execute('INSERT INTO category (id, name) VALUES (?, ?)', (8, 'Овощи'))
 
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (50, 200, 1))
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (50, 200, 2))
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (50, 300, 3))
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (50, 200, 4))
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (10, 30, 5))
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (10, 30, 6))
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (50, 200, 7))
-cursor.execute('INSERT INTO limits (min, max, categories_id) VALUES (?, ?, ?)', (50, 150, 8))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (50, 200, 1))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (50, 200, 2))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (50, 300, 3))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (50, 200, 4))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (10, 30, 5))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (10, 30, 6))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (50, 200, 7))
+cursor.execute('INSERT INTO limits (min, max, category_id) VALUES (?, ?, ?)', (50, 150, 8))
 
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (1, 'Овсянка', 68, 1))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (2, 'Греча', 343, 2))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (3, 'Рис', 360, 2))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (4, 'Курица вареная', 170, 3))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (5, 'Яблоко', 52, 4))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (6, 'Банан', 89, 4))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (7, 'Апельсин', 48, 4))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (8, 'Грецкий орех', 654, 5))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (9, 'Кешью', 553, 5))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (10, 'Бородинский хлеб', 259, 6))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (11, 'Хлебцы', 366, 6))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (12, 'Кефир', 40, 7))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (13, 'Творог', 159, 7))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (14, 'Огурец', 15, 8))
-cursor.execute('INSERT INTO product (id, name, caloricity, categories_id) VALUES (?, ?, ?, ?)', (15, 'Помидор', 18, 8))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (1, 'Овсянка', 68, 1))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (2, 'Греча', 343, 2))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (3, 'Рис', 360, 2))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (4, 'Курица вареная', 170, 3))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (5, 'Яблоко', 52, 4))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (6, 'Банан', 89, 4))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (7, 'Апельсин', 48, 4))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (8, 'Грецкий орех', 654, 5))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (9, 'Кешью', 553, 5))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (10, 'Бородинский хлеб', 259, 6))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (11, 'Хлебцы', 366, 6))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (12, 'Кефир', 40, 7))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (13, 'Творог', 159, 7))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (14, 'Огурец', 15, 8))
+cursor.execute('INSERT INTO product (id, name, caloricity, category_id) VALUES (?, ?, ?, ?)', (15, 'Помидор', 18, 8))
 
 cursor.execute('INSERT INTO refrigerator_has_product (refrigerator_id, product_id, amount) VALUES (?, ?, ?)', (1, 1, 200))
 cursor.execute('INSERT INTO refrigerator_has_product (refrigerator_id, product_id, amount) VALUES (?, ?, ?)', (1, 2, 300))

@@ -26,11 +26,13 @@ def get_optim_solu():
 
     ref_id = 1
     cursor.execute(
-        'SELECT refrigerator_id, product_id, caloricity, categories_id '
+        'SELECT refrigerator_id, product_id, caloricity, category_id '
         'FROM refrigerator_has_product JOIN product '
         'WHERE product_id = id AND refrigerator_id = ?',
         (ref_id,))
     groups = cursor.fetchall()
+    for group in groups:
+        print(group)
 
     # калорийность продуктов
     food_energy_groups = []
@@ -41,13 +43,11 @@ def get_optim_solu():
                 b = np.append(b, x[2])
         food_energy_groups.append(b)
 
-
-
     food_energy_groups = array_multiply_by_number(food_energy_groups, KKAL_IN_GRAMMS)
 
     # граммовки продуктов
     cursor.execute(
-        'SELECT refrigerator_id, product_id, amount, categories_id '
+        'SELECT refrigerator_id, product_id, amount, category_id '
         'FROM refrigerator_has_product JOIN  product '
         'WHERE product_id = id AND refrigerator_id = ?',
         (ref_id,))
