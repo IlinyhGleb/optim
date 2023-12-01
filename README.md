@@ -14,6 +14,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"food_energy_goal": 2000}'
     + export FLASK_APP=json_server/app.py
     + export PYTHONPATH=$PYTHONPATH:./
     + flask run
-
-
+  
+- db.py - Модуль создания и заполнения базы данных, из которой сервер берёт данные
+  * перед началом работы с сервером запустить файл db.py для инициализации БД
 
