@@ -3,6 +3,8 @@ from optim import create_func, nelder_mead
 import numpy as np
 import sqlite3
 
+KKAL_IN_GRAMMS = 0.01
+
 app = Flask(__name__)
 
 
@@ -12,7 +14,6 @@ def flatten(list_of_lists):
 
 @app.route('/optim', methods=['POST'])
 def get_optim_solu():
-
     connection = sqlite3.connect('my_database.db')
     cursor = connection.cursor()
     data = request.get_json()
@@ -20,7 +21,7 @@ def get_optim_solu():
 
     # калорийности продуктов (необходимо получить из БД с размерностью ккал/гр)
     # [1:[], 2:[], ...]
-    KKAL_IN_GR = 0.01
+
     ref_id = 1
     cursor.execute(
         'SELECT refrigerator_id, product_id, caloricity, categories_id FROM refrigerator_has_product JOIN  product WHERE product_id = id AND refrigerator_id = ?',
@@ -31,13 +32,13 @@ def get_optim_solu():
     for i in range(1, 9):
         b = []
         for x in groups:
-            if (x[3] == i):
+            if x[3] == i:
                 b = np.append(b, x[2])
         food_energy_groups.append(b)
 
     for k in food_energy_groups:
         for i in range(0, len(k)):
-            k[i] = k[i]*KKAL_IN_GR
+            k[i] = k[i] * KKAL_IN_GRAMMS
 
     # граммовки продуктов (необходимо получить из БД с размерностью гр)
     # [1:[], 2:[], ...]
@@ -49,7 +50,7 @@ def get_optim_solu():
     for i in range(1, 9):
         b = []
         for x in groups:
-            if (x[3] == i):
+            if x[3] == i:
                 b = np.append(b, x[2])
         food_quantity_groups.append(b)
 
@@ -62,7 +63,7 @@ def get_optim_solu():
         k = k + 1
 
     # ограничения на холодильник (необходимо получить из БД с размерностью гр)
-     # брать из бд, ограничения по каждой группе
+    # брать из бд, ограничения по каждой группе
 
     cursor.execute('SELECT max FROM limits')
     l_max = cursor.fetchall()
