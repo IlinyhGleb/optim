@@ -93,8 +93,7 @@ def get_optim_solu():
                      penalty=1e1, penalty_power=2)
     x0 = np.zeros(len(food_energy_groups_array))
 
-    (res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=10)
-    connection.close()
+    (res, iter), time = nelder_mead(ff, x0, gamma=2, maxiter=20000, dx=100)
     return jsonify({'result': res.tolist()})
 
 
