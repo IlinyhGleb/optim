@@ -14,20 +14,21 @@ def flatten(list_of_lists):
 
 @app.route('/optim', methods=['POST'])
 def get_optim_solu():
-    connection = sqlite3.connect('my_database.db')
-    cursor = connection.cursor()
     data = request.get_json()
     food_energy_goal = data['food_energy_goal']
 
-    # калорийности продуктов (необходимо получить из БД с размерностью ккал/гр)
-    # [1:[], 2:[], ...]
+    connection = sqlite3.connect('./json_server/refrigerator.db')
+    cursor = connection.cursor()
 
     ref_id = 1
     cursor.execute(
-        'SELECT refrigerator_id, product_id, caloricity, categories_id FROM refrigerator_has_product JOIN  product WHERE product_id = id AND refrigerator_id = ?',
+        'SELECT refrigerator_id, product_id, caloricity, categories_id '
+        'FROM refrigerator_has_product JOIN product '
+        'WHERE product_id = id AND refrigerator_id = ?',
         (ref_id,))
     groups = cursor.fetchall()
 
+    # калорийность продуктов
     food_energy_groups = []
     for i in range(1, 9):
         b = []
@@ -40,10 +41,11 @@ def get_optim_solu():
         for i in range(0, len(k)):
             k[i] = k[i] * KKAL_IN_GRAMMS
 
-    # граммовки продуктов (необходимо получить из БД с размерностью гр)
-    # [1:[], 2:[], ...]
+    # граммовки продуктов
     cursor.execute(
-        'SELECT refrigerator_id, product_id, amount, categories_id FROM refrigerator_has_product JOIN  product WHERE product_id = id AND refrigerator_id = ?',
+        'SELECT refrigerator_id, product_id, amount, categories_id '
+        'FROM refrigerator_has_product JOIN  product '
+        'WHERE product_id = id AND refrigerator_id = ?',
         (ref_id,))
     groups = cursor.fetchall()
     food_quantity_groups = []
@@ -54,6 +56,7 @@ def get_optim_solu():
                 b = np.append(b, x[2])
         food_quantity_groups.append(b)
 
+    # ограничения групп
     cursor.execute('SELECT min FROM limits')
     l_min = cursor.fetchall()
     limits_min = np.zeros(8)
@@ -61,12 +64,12 @@ def get_optim_solu():
     for x in l_min:
         limits_min[k] = x[0]
         k = k + 1
-
-    # ограничения на холодильник (необходимо получить из БД с размерностью гр)
-    # брать из бд, ограничения по каждой группе
-
     cursor.execute('SELECT max FROM limits')
+
     l_max = cursor.fetchall()
+
+    connection.close()
+
     limits_max = np.zeros(8)
     k = 0
     for x in l_max:

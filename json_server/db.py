@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('my_database.db')
+connection = sqlite3.connect('refrigerator.db')
 cursor = connection.cursor()
 
 cursor.execute('''
