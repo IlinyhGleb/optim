@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from optim import create_func, nelder_mead
 import numpy as np
 import sqlite3
+from itertools import groupby
 
 KKAL_IN_GRAMMS = 0.01
 
@@ -16,63 +17,44 @@ def array_multiply_by_number(ar: list, num: float):
     return [[el * num for el in row] for row in ar]
 
 
+def table_groupby(table, valnum=1, keynum=0):
+    '''группирует данные в столбце №valnum в кортежи по столбцу (ключу) №keynum'''
+    return [tuple(val[valnum] for val in group) for key, group in groupby(table, key=lambda x: x[keynum])]
+
+
 @app.route('/optim', methods=['POST'])
 def get_optim_solu():
     data = request.get_json()
     food_energy_goal = data['food_energy_goal']
+    ref_id = 1
 
     connection = sqlite3.connect('./json_server/refrigerator.db')
     cursor = connection.cursor()
 
-    ref_id = 1
-    # cursor.execute(
-    #     'SELECT refrigerator_id, product_id, caloricity, amount, category_id '
-    #     'FROM refrigerator_has_product JOIN product '
-    #     'WHERE product_id = id AND refrigerator_id = ?',
-    #     (ref_id,))
-
-
+    # обращение к базе данных
+    # калорийность + граммовки
     cursor.execute(
-        'SELECT refrigerator_id, product_id, caloricity, category_id '
-        'FROM refrigerator_has_product JOIN product '
-        'WHERE product_id = id AND refrigerator_id = ?',
+        'SELECT category_id, caloricity, amount '
+        'FROM refrigerator_has_product JOIN product USING(product_id) '
+        'WHERE refrigerator_id = ?'
+        'ORDER BY category_id ',
         (ref_id,))
     groups = cursor.fetchall()
-    # for group in groups:
-    #     print(group)
-    # print(len(groups))
-    # калорийность продуктов
-    food_energy_groups = []
-    for i in range(1, 9):
-        b = []
-        for x in groups:
-            if x[3] == i:
-                b = np.append(b, x[2])
-        food_energy_groups.append(b)
-
-    food_energy_groups = array_multiply_by_number(food_energy_groups, KKAL_IN_GRAMMS)
-
-    # граммовки продуктов
-    cursor.execute(
-        'SELECT refrigerator_id, product_id, amount, category_id '
-        'FROM refrigerator_has_product JOIN  product '
-        'WHERE product_id = id AND refrigerator_id = ?',
-        (ref_id,))
-    groups = cursor.fetchall()
-
-    food_quantity_groups = []
-    for i in range(1, 9):
-        b = []
-        for x in groups:
-            if x[3] == i:
-                b = np.append(b, x[2])
-        food_quantity_groups.append(b)
 
     # ограничения групп
     cursor.execute('SELECT min, max FROM limits ORDER BY category_id')
     limits = cursor.fetchall()
     connection.close()
 
+    # постановка задачи оптимизации
+    # калорийность продуктов
+    food_energy_groups = table_groupby(groups, 1, 0)
+    food_energy_groups = array_multiply_by_number(food_energy_groups, KKAL_IN_GRAMMS)
+
+    # граммовки продуктов
+    food_quantity_groups = table_groupby(groups, 2, 0)
+
+    # ограничения групп
     group_limits_min = np.array([sublist[0] for sublist in limits])
     group_limits_max = np.array([sublist[1] for sublist in limits])
 
