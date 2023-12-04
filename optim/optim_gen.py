@@ -64,4 +64,8 @@ def create_func(food_energy_goal,
             xx_new = sorted(xx)
             f_res += penalty * max(xx_new[-2] - EPS, 0)**penalty_power
 
+        return f_res
+
     return inner_method
+
+
