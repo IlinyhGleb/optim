@@ -10,10 +10,12 @@ app = Flask(__name__)
 
 
 def flatten(list_of_lists):
+    '''превращает двухмерный массив (список списков) в одномерный массив (список)'''
     return [item for sublist in list_of_lists for item in sublist]
 
 
 def array_multiply_by_number(ar: list, num: float):
+    '''умножает все элементы массива (списка списков) на скалярное число'''
     return [[el * num for el in row] for row in ar]
 
 
