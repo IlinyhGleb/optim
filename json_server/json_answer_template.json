@@ -1,0 +1,16 @@
+{
+  "is_calculated":true,
+  "data":
+  [
+    {
+      "id":1,
+      "product_name":"Гречка",
+      "weight":121
+    },
+    {
+      "id":2,
+      "product_name":"Курица",
+      "weight":50
+    }
+  ]
+}
