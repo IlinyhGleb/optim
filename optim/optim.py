@@ -29,9 +29,9 @@ def nelder_mead(f, x0, alpha=1, gamma=2, rho=0.5, sigma=0.5, tol=1e-6, maxiter=1
     tol - допустимая точность
     """
     # Создаём начальный симплекс (n+1 мерный)
-    simplex = [x0]
+    simplex = [np.array(x0)]
     for i in range(len(x0)):
-        point = x0.copy()
+        point = np.array(x0).copy()
         point[i] = point[i] + dx
         simplex.append(point)
 

@@ -6,15 +6,14 @@
 
 - optim_test.py - Модуль для интеграционного тестирования (запускаем для тестов его)
 
-- json_server - сервер на Flask, принимающий json over http запрос и обрабатывающий его
-  * обратиться к серверу можно с помощью curl:
-curl -X POST -H "Content-Type: application/json" -d '{"food_energy_goal": 2000}' http://localhost:5000/optim
-  * на данный момент принимается один параметр: food_energy_goal - целевая калорийность меню
-  * запуск сервера после клонирования репозитория:
-    + export FLASK_APP=json_server/app.py
-    + export PYTHONPATH=$PYTHONPATH:./
-    + flask run
-  
-- db.py - Модуль создания и заполнения базы данных, из которой сервер берёт данные
-  * перед началом работы с сервером запустить файл db.py для инициализации БД
+## Использование:
+```python
+from optim import nelder_mead
+
+function = lambda x: x[0]**2+(x[1]-2)**2+x[2]**2
+x0 = [1.0, 1.0, 1.0]
+
+(xmin, iters), time = nelder_mead(function, x0)
+print(f"Получен экстремум {xmin} за {iters} итераций и {time} секунд")
+```
 
