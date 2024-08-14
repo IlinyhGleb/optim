@@ -19,7 +19,7 @@ def timing(f):
 
 @timing
 def nelder_mead(f, x0, alpha=1, gamma=2, rho=0.5, sigma=0.5, tol=1e-6, maxiter=1000, dx=1, stop='std'):
-    '''
+    """
     f - целевая функция
     x0 - начальная точка
     alpha - коэффициент отражения
@@ -27,7 +27,7 @@ def nelder_mead(f, x0, alpha=1, gamma=2, rho=0.5, sigma=0.5, tol=1e-6, maxiter=1
     rho - коэффициент сжатия
     sigma - коэффициент глобального сжатия
     tol - допустимая точность
-    '''
+    """
     # Создаём начальный симплекс (n+1 мерный)
     simplex = [x0]
     for i in range(len(x0)):
@@ -46,13 +46,17 @@ def nelder_mead(f, x0, alpha=1, gamma=2, rho=0.5, sigma=0.5, tol=1e-6, maxiter=1
 
         # Шаг 3: отражение
         xr = centroid + alpha * (centroid - simplex[-1])
-        if f(xl) <= f(xr) < f(simplex[-2]):
+
+        fxl = f(xl)
+        fxr = f(xr)
+
+        if fxl <= fxr < f(simplex[-2]):
             simplex[-1] = xr
 
         # Шаг 4: растяжение
-        elif f(xr) < f(xl):
+        elif fxr < fxl:
             xe = centroid + gamma * (xr - centroid)
-            if f(xe) < f(xr):
+            if f(xe) < fxr:
                 simplex[-1] = xe
             else:
                 simplex[-1] = xr
@@ -71,10 +75,8 @@ def nelder_mead(f, x0, alpha=1, gamma=2, rho=0.5, sigma=0.5, tol=1e-6, maxiter=1
         if stop == 'std':
             if all([np.linalg.norm(xl - simplex[i]) < tol for i in range(1, len(simplex))]):
                 break
-        elif type(stop) == float:
-            # for s in simplex:
-                # print(f(s))
-            if f(xl) <= stop:
+        elif type(stop) is float:
+            if fxl <= stop:
                 break
 
     return simplex[0], iter
