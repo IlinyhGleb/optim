@@ -30,4 +30,4 @@ class Test_Optim:
         (xmin, iters), time = nelder_mead(ff, x0)
         actual_result = xmin
 
-        assert np.alltrue(abs(actual_result - expected_result) <= EPS)
+        assert np.all(abs(actual_result - expected_result) <= EPS)
