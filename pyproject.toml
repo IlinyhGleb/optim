@@ -25,7 +25,7 @@ maintainers = [
 dependencies = ["numpy"]
 
 [project.optional-dependencies] # Optional
-dev = ["pytest", "matplotlib", "matplotlib", "matplotlib"]
+dev = ["pytest"]
 test = ["pytest"]
 
 [project.urls]  # Optional
